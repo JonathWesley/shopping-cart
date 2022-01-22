@@ -9,12 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.shoppingcart.entities.Coupon;
-import com.shoppingcart.exceptions.InvalidInfoException;
 import com.shoppingcart.repositories.CouponRepository;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Service
 public class CouponService {
 
@@ -32,21 +28,16 @@ public class CouponService {
 					ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null) :
 					ResponseEntity.ok().body(couponInserted);
 		} catch (Exception e) {
-			return null;
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}
 	
 	public ResponseEntity<Coupon> findById (String id) {
-		try {
-			Optional<Coupon> couponData = couponRepository.findById(id);
-			
-			return couponData.isPresent() ? 
-					ResponseEntity.ok().body(couponData.get()) :
-					ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-		} catch(InvalidInfoException e) {
-			e.printStackTrace();
-			throw e;
-		}
+		Optional<Coupon> couponData = couponRepository.findById(id);
+		
+		return couponData.isPresent() ? 
+				ResponseEntity.ok().body(couponData.get()) :
+				ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		
 	}
 	
