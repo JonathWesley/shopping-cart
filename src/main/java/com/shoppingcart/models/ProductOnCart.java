@@ -21,4 +21,6 @@ public class ProductOnCart {
 	private Product product;
 	
 	private Integer quantity;
+	
+	private Double subTotalValue;
 }
