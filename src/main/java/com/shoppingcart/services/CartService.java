@@ -79,6 +79,41 @@ public class CartService {
 		}
 	}
 	
+	public ResponseEntity<Cart> removeProduct(String idUser, String idProduct) {
+		try {
+			Optional<Cart> cartData = cartRepository.findByUser(idUser);
+			
+			if(cartData.isPresent()) {
+				Cart cartUpdated = cartData.get();
+				
+				List<ProductOnCart> products = cartUpdated.getProducts();
+				
+				ProductOnCart productOnCart = products.stream().filter(product -> product.getProduct().getId().equals(idProduct)).findFirst().get();
+				
+				if(productOnCart != null) {
+					products.remove(productOnCart);
+					
+					if(products.isEmpty()) {
+						cartRepository.deleteById(cartUpdated.getId());
+						
+					    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+					}else {
+						cartUpdated.setProducts(products);
+						
+					    return ResponseEntity.ok().body(cartRepository.save(cartUpdated));
+					}
+				}
+				
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+			}
+			
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		} catch(Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+	}
+	
 	public ResponseEntity<Cart> findById (String id) {
 		try {
 			Optional<Cart> cartData = cartRepository.findById(id);
@@ -108,6 +143,4 @@ public class CartService {
 		}
 			
 	}
-
-		
 }

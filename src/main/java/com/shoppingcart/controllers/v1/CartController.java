@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,6 +25,11 @@ public class CartController{
 	@PostMapping("/{idUser}/{idProduct}/{quantity}")
 	public ResponseEntity<Cart> addProduct(@PathVariable String idUser, @PathVariable String idProduct, @PathVariable Integer quantity) {
 		return cartService.addProduct(idUser, idProduct, quantity);
+	}
+	
+	@PutMapping("/{idUser}/{idProduct}")
+	public ResponseEntity<Cart> removeProduct(@PathVariable String idUser, @PathVariable String idProduct) {
+		return cartService.removeProduct(idUser, idProduct);
 	}
 	
 	@GetMapping("/{id}")
