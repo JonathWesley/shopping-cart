@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shoppingcart.entities.Cart;
-import com.shoppingcart.entities.Product;
 import com.shoppingcart.services.CartService;
 
 @RestController
@@ -22,28 +21,33 @@ public class CartController{
 	@Autowired
 	private CartService cartService;
 	
-	@PostMapping("/{idUser}/{idProduct}/{quantity}")
+	@PostMapping("/product/{idUser}/{idProduct}/{quantity}")
 	public ResponseEntity<Cart> addProduct(@PathVariable String idUser, @PathVariable String idProduct, @PathVariable Integer quantity) {
 		return cartService.addProduct(idUser, idProduct, quantity);
 	}
 	
-	@PutMapping("/{idUser}/{idProduct}")
+	@PutMapping("/product/{idUser}/{idProduct}")
 	public ResponseEntity<Cart> removeProduct(@PathVariable String idUser, @PathVariable String idProduct) {
 		return cartService.removeProduct(idUser, idProduct);
 	}
 	
-	@PutMapping("/{idUser}/{idProduct}/{quantity}")
-	public ResponseEntity<Cart> removeProduct(@PathVariable String idUser, @PathVariable String idProduct, @PathVariable Integer quantity) {
+	@PutMapping("/product/{idUser}/{idProduct}/{quantity}")
+	public ResponseEntity<Cart> updateProduct(@PathVariable String idUser, @PathVariable String idProduct, @PathVariable Integer quantity) {
 		return cartService.updateProduct(idUser, idProduct, quantity);
-	}
-	
-	@GetMapping("/{id}")
-	public ResponseEntity<Cart> getById(@PathVariable String id) {
-		return cartService.findById(id);
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<HttpStatus> deleteById(@PathVariable String id) {
 		return cartService.deleteCart(id);
+	}
+	
+	@PutMapping("/coupon/{idUser}/{codCoupon}")
+	public ResponseEntity<Cart> addCoupon(@PathVariable String idUser, @PathVariable String codCoupon) {
+		return cartService.addCoupon(idUser, codCoupon);
+	}
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<Cart> getById(@PathVariable String id) {
+		return cartService.findById(id);
 	}
 }
