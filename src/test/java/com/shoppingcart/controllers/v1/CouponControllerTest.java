@@ -14,6 +14,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -67,10 +68,14 @@ public class CouponControllerTest {
 		
 	}
 	
-//	@Test
-//	public void testFindById_whenNotFound_expectStatus404() throws Exception {
-//		String id = "61ebabb8a9f4da3258638b51";
-//		
-//		
-//	}
+	@Test
+	public void testFindById_whenNotFound_expectStatusNotFound() throws Exception {
+		String id = "61ebabb8a9f4da3258638b51";
+		
+		when(couponService.findById(id)).thenReturn(ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
+		
+		mockMvc.perform(get(URI_PATH + id))
+		        .andDo(print())
+		        .andExpect(status().isNotFound());
+	}
 }
