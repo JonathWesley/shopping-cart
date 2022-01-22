@@ -1,7 +1,7 @@
 package com.shoppingcart.exceptions;
 
-public class InvalidInfoException extends RuntimeException {
-	
+public class InvalidInfoException extends RuntimeException{
+
 	private static final long serialVersionUID = 1L;
 
 	public InvalidInfoException(String msg) {
@@ -11,4 +11,5 @@ public class InvalidInfoException extends RuntimeException {
     public InvalidInfoException(String msg, Throwable cause) {
         super(msg, cause);
     }
+	
 }

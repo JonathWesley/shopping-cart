@@ -12,9 +12,6 @@ import com.shoppingcart.entities.Coupon;
 import com.shoppingcart.exceptions.InvalidInfoException;
 import com.shoppingcart.repositories.CouponRepository;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Service
 public class CouponService {
 
@@ -26,27 +23,32 @@ public class CouponService {
 	
 	public ResponseEntity<Coupon> insertCoupon(Coupon coupon) {
 		try {
+			if(coupon.getCod() == null) 
+				throw new InvalidInfoException("Cupom deve possuir um código.");
+			if(coupon.getValue() == null) 
+				throw new InvalidInfoException("Cupom deve possuir um valor.");
+			if(coupon.getIsActive() == null) 
+				throw new InvalidInfoException("Cupom deve possuir a informação de ativo.");
+			
 			Coupon couponInserted = couponRepository.save(coupon);
 
 			return  couponInserted == null ? 
 					ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null) :
-					ResponseEntity.ok().body(couponInserted);
+					ResponseEntity.status(HttpStatus.CREATED).body(couponInserted);
+			
+		} catch (InvalidInfoException e){
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		} catch (Exception e) {
-			return null;
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}
 	
 	public ResponseEntity<Coupon> findById (String id) {
-		try {
-			Optional<Coupon> couponData = couponRepository.findById(id);
-			
-			return couponData.isPresent() ? 
-					ResponseEntity.ok().body(couponData.get()) :
-					ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-		} catch(InvalidInfoException e) {
-			e.printStackTrace();
-			throw e;
-		}
+		Optional<Coupon> couponData = couponRepository.findById(id);
+		
+		return couponData.isPresent() ? 
+				ResponseEntity.ok().body(couponData.get()) :
+				ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		
 	}
 	
@@ -54,11 +56,25 @@ public class CouponService {
 		Optional<Coupon> couponData = couponRepository.findById(id);
 		
 		if (couponData.isPresent()) {
-			Coupon couponUpdated = couponData.get();
-			couponUpdated.setCod(coupon.getCod());
-			couponUpdated.setValue(coupon.getValue());
-			couponUpdated.setIsActive(coupon.getIsActive());
-		    return ResponseEntity.ok().body(couponRepository.save(couponUpdated));
+			try {
+				if(coupon.getCod() == null) 
+					throw new InvalidInfoException("Cupom deve possuir um código.");
+				if(coupon.getValue() == null) 
+					throw new InvalidInfoException("Cupom deve possuir um valor.");
+				if(coupon.getIsActive() == null) 
+					throw new InvalidInfoException("Cupom deve possuir a informação de ativo.");
+				
+				Coupon couponUpdated = couponData.get();
+				couponUpdated.setCod(coupon.getCod());
+				couponUpdated.setValue(coupon.getValue());
+				couponUpdated.setIsActive(coupon.getIsActive());
+			    return ResponseEntity.ok().body(couponRepository.save(couponUpdated));
+			    
+			} catch (InvalidInfoException e){
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+			} catch (Exception e) {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+			}
 		} else {
 		    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
