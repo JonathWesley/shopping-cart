@@ -201,6 +201,25 @@ public class CartService {
 		}
 	}
 	
+	public ResponseEntity<Cart> removeCoupon(String idUser) {
+		try {
+			Optional<Cart> cartData = cartRepository.findByUser(idUser);
+			
+			if(cartData.isPresent()) {												
+				Cart cartUpdated = cartData.get();
+					
+				cartUpdated.setCoupon(null);
+					
+				return ResponseEntity.ok().body(cartRepository.save(cartUpdated));
+			}
+			
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		} catch(Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+	}
+	
 	public ResponseEntity<Cart> findById (String id) {
 		try {
 			Optional<Cart> cartData = cartRepository.findById(id);

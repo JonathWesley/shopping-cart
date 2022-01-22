@@ -26,7 +26,7 @@ public class CartController{
 		return cartService.addProduct(idUser, idProduct, quantity);
 	}
 	
-	@PutMapping("/product/{idUser}/{idProduct}")
+	@DeleteMapping("/product/{idUser}/{idProduct}")
 	public ResponseEntity<Cart> removeProduct(@PathVariable String idUser, @PathVariable String idProduct) {
 		return cartService.removeProduct(idUser, idProduct);
 	}
@@ -41,9 +41,14 @@ public class CartController{
 		return cartService.deleteCart(id);
 	}
 	
-	@PutMapping("/coupon/{idUser}/{codCoupon}")
+	@PostMapping("/coupon/{idUser}/{codCoupon}")
 	public ResponseEntity<Cart> addCoupon(@PathVariable String idUser, @PathVariable String codCoupon) {
 		return cartService.addCoupon(idUser, codCoupon);
+	}
+	
+	@DeleteMapping("/coupon/{idUser}")
+	public ResponseEntity<Cart> removeCoupon(@PathVariable String idUser) {
+		return cartService.removeCoupon(idUser);
 	}
 	
 	@GetMapping("/{id}")
