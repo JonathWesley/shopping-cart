@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.shoppingcart.entities.Coupon;
 import com.shoppingcart.entities.Product;
 import com.shoppingcart.exceptions.InvalidInfoException;
 import com.shoppingcart.repositories.ProductRepository;
@@ -67,11 +68,18 @@ public class ProductService {
 	}
 	
 	public ResponseEntity<HttpStatus> deleteProduct(String id) {
-		try {
-			productRepository.deleteById(id);
-		    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-		} catch (Exception e) {
-		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		Optional<Product> productData = productRepository.findById(id);
+		
+		if (productData.isPresent()) {
+			try {
+				productRepository.deleteById(id);
+			    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+			} catch (Exception e) {
+			    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+			}
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
+			
 	}	
 }
