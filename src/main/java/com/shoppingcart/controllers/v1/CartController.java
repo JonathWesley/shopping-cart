@@ -32,6 +32,11 @@ public class CartController{
 		return cartService.removeProduct(idUser, idProduct);
 	}
 	
+	@PutMapping("/{idUser}/{idProduct}/{quantity}")
+	public ResponseEntity<Cart> removeProduct(@PathVariable String idUser, @PathVariable String idProduct, @PathVariable Integer quantity) {
+		return cartService.updateProduct(idUser, idProduct, quantity);
+	}
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<Cart> getById(@PathVariable String id) {
 		return cartService.findById(id);
