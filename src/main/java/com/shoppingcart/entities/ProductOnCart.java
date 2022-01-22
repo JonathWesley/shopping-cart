@@ -1,4 +1,4 @@
-package entities;
+package com.shoppingcart.entities;
 
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
