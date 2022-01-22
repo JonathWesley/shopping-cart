@@ -1,6 +1,9 @@
-package entities;
+package com.shoppingcart.entities;
+
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.AllArgsConstructor;
@@ -10,20 +13,18 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 @Data
-@Document(collection = "product")
+@Document(collection = "cart")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Product {
-	
+public class Cart {
+
 	@Id
 	private String id;
 	
-	private String name;
+	@DBRef
+	private Coupon coupon;
 	
-	private Double price;
-	
-	private Integer quantity;
-	
-	private Boolean isActive;
+	@DBRef
+	private List<ProductOnCart> products;
 }
