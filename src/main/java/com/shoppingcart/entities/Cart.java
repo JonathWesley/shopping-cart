@@ -31,4 +31,6 @@ public class Cart {
 	
 	private List<ProductOnCart> products;
 	
+	private Double totalValue;
+	
 }

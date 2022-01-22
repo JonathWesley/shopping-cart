@@ -56,17 +56,26 @@ public class CartService {
 						Cart cartUpdated = cartData.get();
 						
 						List<ProductOnCart> products = cartUpdated.getProducts();
-						products.add(new ProductOnCart(productData.get(), quantity));
+						
+						ProductOnCart productOnCart = products.stream().filter(product -> product.getProduct().getId().equals(idProduct)).findFirst().orElse(null);
+						if(productOnCart != null) {
+							return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+						}
+						
+						products.add(new ProductOnCart(productData.get(), quantity, productData.get().getPrice() * quantity));
 						
 						cartUpdated.setProducts(products);
+						cartUpdated.setTotalValue(calculateTotalValue(cartUpdated));
 						
 					    return ResponseEntity.ok().body(cartRepository.save(cartUpdated));
 					}else {
-						ProductOnCart productOnCart = ProductOnCart.builder().product(productData.get()).quantity(quantity).build();
+						Double subTotalValue = productData.get().getPrice() * quantity;
+						
+						ProductOnCart productOnCart = ProductOnCart.builder().product(productData.get()).quantity(quantity).subTotalValue(subTotalValue).build();
 						
 						List<ProductOnCart> products = List.of(productOnCart);
 						
-						Cart cartCreated = Cart.builder().user(userData.get()).products(products).build();
+						Cart cartCreated = Cart.builder().user(userData.get()).products(products).totalValue(subTotalValue).build();
 						
 						return ResponseEntity.ok().body(cartRepository.save(cartCreated));
 					}
@@ -82,7 +91,7 @@ public class CartService {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}
-	
+
 	public ResponseEntity<Cart> removeProduct(String idUser, String idProduct) {
 		try {
 			Optional<Cart> cartData = cartRepository.findByUser(idUser);
@@ -92,7 +101,7 @@ public class CartService {
 				
 				List<ProductOnCart> products = cartUpdated.getProducts();
 				
-				ProductOnCart productOnCart = products.stream().filter(product -> product.getProduct().getId().equals(idProduct)).findFirst().get();
+				ProductOnCart productOnCart = products.stream().filter(product -> product.getProduct().getId().equals(idProduct)).findFirst().orElse(null);
 				
 				if(productOnCart != null) {
 					products.remove(productOnCart);
@@ -103,6 +112,7 @@ public class CartService {
 					    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 					}else {
 						cartUpdated.setProducts(products);
+						cartUpdated.setTotalValue(calculateTotalValue(cartUpdated));
 						
 					    return ResponseEntity.ok().body(cartRepository.save(cartUpdated));
 					}
@@ -127,7 +137,7 @@ public class CartService {
 				
 				List<ProductOnCart> products = cartUpdated.getProducts();
 				
-				ProductOnCart productOnCart = products.stream().filter(product -> product.getProduct().getId().equals(idProduct)).findFirst().get();
+				ProductOnCart productOnCart = products.stream().filter(product -> product.getProduct().getId().equals(idProduct)).findFirst().orElse(null);
 				
 				if(productOnCart != null) {
 					if(productOnCart.getProduct().getQuantity() < quantity) {
@@ -138,6 +148,7 @@ public class CartService {
 					
 					if(quantity > 0) {
 						productOnCart.setQuantity(quantity);
+						productOnCart.setSubTotalValue(productOnCart.getProduct().getPrice() * quantity);
 						products.add(productOnCart);
 					}
 					
@@ -147,6 +158,7 @@ public class CartService {
 					    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 					}else {
 						cartUpdated.setProducts(products);
+						cartUpdated.setTotalValue(calculateTotalValue(cartUpdated));
 						
 					    return ResponseEntity.ok().body(cartRepository.save(cartUpdated));
 					}
@@ -189,6 +201,7 @@ public class CartService {
 					Cart cartUpdated = cartData.get();
 					
 					cartUpdated.setCoupon(couponData.get());
+					cartUpdated.setTotalValue(calculateTotalValue(cartUpdated));
 					
 				    return ResponseEntity.ok().body(cartRepository.save(cartUpdated));
 				}
@@ -209,6 +222,7 @@ public class CartService {
 				Cart cartUpdated = cartData.get();
 					
 				cartUpdated.setCoupon(null);
+				cartUpdated.setTotalValue(calculateTotalValue(cartUpdated));
 					
 				return ResponseEntity.ok().body(cartRepository.save(cartUpdated));
 			}
@@ -232,5 +246,28 @@ public class CartService {
 			throw e;
 		}
 		
+	}
+	
+	public ResponseEntity<Cart> findByUserId(String idUser) {
+		try {
+			Optional<Cart> cartData = cartRepository.findByUser(idUser);
+			
+			return cartData.isPresent() ? 
+					ResponseEntity.ok().body(cartData.get()) :
+					ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		} catch(InvalidInfoException e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
+	public Double calculateTotalValue(Cart cart) {
+		Double totalValue = cart.getProducts().stream().mapToDouble(o -> o.getSubTotalValue()).sum();
+		
+		if(cart.getCoupon() != null) {
+			totalValue = totalValue - cart.getCoupon().getValue() < 0 ? 0.0 : totalValue - cart.getCoupon().getValue();
+		}
+		
+		return totalValue;
 	}
 }
