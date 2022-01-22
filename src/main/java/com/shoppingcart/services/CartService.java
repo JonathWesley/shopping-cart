@@ -10,11 +10,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.shoppingcart.entities.Cart;
+import com.shoppingcart.entities.Coupon;
 import com.shoppingcart.entities.Product;
 import com.shoppingcart.entities.User;
 import com.shoppingcart.exceptions.InvalidInfoException;
 import com.shoppingcart.models.ProductOnCart;
 import com.shoppingcart.repositories.CartRepository;
+import com.shoppingcart.repositories.CouponRepository;
 import com.shoppingcart.repositories.ProductRepository;
 import com.shoppingcart.repositories.UserRepository;
 
@@ -30,6 +32,8 @@ public class CartService {
 	UserRepository userRepository;
 	@Autowired
 	ProductRepository productRepository;
+	@Autowired
+	CouponRepository couponRepository;
 	
 	@Autowired
 	MongoOperations mongoOperations;
@@ -158,20 +162,6 @@ public class CartService {
 		}
 	}
 	
-	public ResponseEntity<Cart> findById (String id) {
-		try {
-			Optional<Cart> cartData = cartRepository.findById(id);
-			
-			return cartData.isPresent() ? 
-					ResponseEntity.ok().body(cartData.get()) :
-					ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-		} catch(InvalidInfoException e) {
-			e.printStackTrace();
-			throw e;
-		}
-		
-	}
-	
 	public ResponseEntity<HttpStatus> deleteCart(String id) {
 		Optional<Cart> cartData = cartRepository.findById(id);
 		
@@ -186,5 +176,42 @@ public class CartService {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
 			
+	}
+	
+	public ResponseEntity<Cart> addCoupon(String idUser, String codCoupon) {
+		try {
+			Optional<Cart> cartData = cartRepository.findByUser(idUser);
+			
+			if(cartData.isPresent()) {												
+				Optional<Coupon> couponData = couponRepository.findByCod(codCoupon);
+				
+				if(couponData.isPresent()) {
+					Cart cartUpdated = cartData.get();
+					
+					cartUpdated.setCoupon(couponData.get());
+					
+				    return ResponseEntity.ok().body(cartRepository.save(cartUpdated));
+				}
+			}
+			
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		} catch(Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+	}
+	
+	public ResponseEntity<Cart> findById (String id) {
+		try {
+			Optional<Cart> cartData = cartRepository.findById(id);
+			
+			return cartData.isPresent() ? 
+					ResponseEntity.ok().body(cartData.get()) :
+					ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		} catch(InvalidInfoException e) {
+			e.printStackTrace();
+			throw e;
+		}
+		
 	}
 }
