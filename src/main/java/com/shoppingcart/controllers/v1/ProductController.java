@@ -13,13 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.shoppingcart.controllers.v1.swagger.ProductControllerSwagger;
 import com.shoppingcart.entities.Product;
 import com.shoppingcart.services.ProductService;
 
 @RestController
 @RequestMapping(path="/v1/product")
-public class ProductController implements ProductControllerSwagger{
+public class ProductController{
 	@Autowired
 	private ProductService productService;
 	
