@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.shoppingcart.entities.Coupon;
 import com.shoppingcart.entities.Product;
 import com.shoppingcart.exceptions.InvalidInfoException;
 import com.shoppingcart.repositories.ProductRepository;
