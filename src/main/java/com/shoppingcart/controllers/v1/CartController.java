@@ -7,10 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shoppingcart.entities.Cart;
+import com.shoppingcart.entities.Product;
 import com.shoppingcart.services.CartService;
 
 @RestController
@@ -18,6 +20,11 @@ import com.shoppingcart.services.CartService;
 public class CartController{
 	@Autowired
 	private CartService cartService;
+	
+	@PostMapping("/{idUser}/{idProduct}/{quantity}")
+	public ResponseEntity<Cart> addProduct(@PathVariable String idUser, @PathVariable String idProduct, @PathVariable Integer quantity) {
+		return cartService.addProduct(idUser, idProduct, quantity);
+	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Cart> getById(@PathVariable String id) {

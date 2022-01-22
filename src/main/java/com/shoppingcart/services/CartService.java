@@ -1,5 +1,6 @@
 package com.shoppingcart.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.shoppingcart.entities.Cart;
+import com.shoppingcart.entities.Product;
+import com.shoppingcart.entities.User;
 import com.shoppingcart.exceptions.InvalidInfoException;
+import com.shoppingcart.models.ProductOnCart;
 import com.shoppingcart.repositories.CartRepository;
+import com.shoppingcart.repositories.ProductRepository;
+import com.shoppingcart.repositories.UserRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,9 +26,58 @@ public class CartService {
 
 	@Autowired
 	CartRepository cartRepository;
+	@Autowired
+	UserRepository userRepository;
+	@Autowired
+	ProductRepository productRepository;
 	
 	@Autowired
 	MongoOperations mongoOperations;
+	
+	public ResponseEntity<Cart> addProduct(String idUser, String idProduct, Integer quantity) {
+		try {
+			Optional<User> userData = userRepository.findById(idUser);
+			
+			if(userData.isPresent()) {
+				Optional<Product> productData = productRepository.findById(idProduct);
+				
+				if(productData.isPresent()) {
+					if(productData.get().getQuantity() < quantity) {
+						return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+					}
+					
+					Optional<Cart> cartData = cartRepository.findByUser(idUser);
+					
+					if(cartData.isPresent()) {
+						Cart cartUpdated = cartData.get();
+						
+						List<ProductOnCart> products = cartUpdated.getProducts();
+						products.add(new ProductOnCart(productData.get(), quantity));
+						
+						cartUpdated.setProducts(products);
+						
+					    return ResponseEntity.ok().body(cartRepository.save(cartUpdated));
+					}else {
+						ProductOnCart productOnCart = ProductOnCart.builder().product(productData.get()).quantity(quantity).build();
+						
+						List<ProductOnCart> products = List.of(productOnCart);
+						
+						Cart cartCreated = Cart.builder().user(userData.get()).products(products).build();
+						
+						return ResponseEntity.ok().body(cartRepository.save(cartCreated));
+					}
+					
+				}
+				
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+			}
+			
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		} catch(Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+	}
 	
 	public ResponseEntity<Cart> findById (String id) {
 		try {
@@ -52,5 +107,7 @@ public class CartService {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
 			
-	}	
+	}
+
+		
 }
