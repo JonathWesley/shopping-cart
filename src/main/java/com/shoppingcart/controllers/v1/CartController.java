@@ -2,7 +2,6 @@ package com.shoppingcart.controllers.v1;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,23 +46,18 @@ public class CartController{
 		return cartService.removeCoupon(idUser);
 	}
 	
-	@GetMapping("/{id}")
-	public ResponseEntity<CartResponse> getById(@PathVariable String id) {
-		return cartService.findById(id);
-	}
-	
 	@GetMapping("/user/{idUser}")
 	public ResponseEntity<CartResponse> getByUserId(@PathVariable String idUser) {
 		return cartService.findByUserId(idUser);
 	}
 	
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Cart> deleteById(@PathVariable String id) {
-		return cartService.deleteCart(id);
-	}
-	
 	@DeleteMapping("/user/{idUser}")
 	public ResponseEntity<Cart> deleteByUserId(@PathVariable String idUser) {
 		return cartService.deleteCartByUserId(idUser);
+	}
+	
+	@DeleteMapping("/finalize/{idUser}")
+	public ResponseEntity<Cart> finalizePurchase(@PathVariable String idUser) {
+		return cartService.finalizePurchase(idUser);
 	}
 }
