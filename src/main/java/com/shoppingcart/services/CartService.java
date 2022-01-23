@@ -81,8 +81,6 @@ public class CartService {
 					}
 					
 				}
-				
-				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 			}
 			
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -230,7 +228,7 @@ public class CartService {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		} catch(InvalidInfoException e) {
 			e.printStackTrace();
-			throw e;
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}
 	
