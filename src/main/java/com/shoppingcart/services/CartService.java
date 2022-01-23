@@ -174,22 +174,6 @@ public class CartService {
 		}
 	}
 	
-	public ResponseEntity<HttpStatus> deleteCart(String id) {
-		Optional<Cart> cartData = cartRepository.findById(id);
-		
-		if (cartData.isPresent()) {
-			try {
-				cartRepository.deleteById(id);
-			    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-			} catch (Exception e) {
-			    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-			}
-		} else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-		}
-			
-	}
-	
 	public ResponseEntity<Cart> addCoupon(String idUser, String codCoupon) {
 		try {
 			Optional<Cart> cartData = cartRepository.findByUser(idUser);
@@ -258,6 +242,36 @@ public class CartService {
 		} catch(InvalidInfoException e) {
 			e.printStackTrace();
 			throw e;
+		}
+	}
+	
+	public ResponseEntity<HttpStatus> deleteCart(String id) {
+		Optional<Cart> cartData = cartRepository.findById(id);
+		
+		if (cartData.isPresent()) {
+			try {
+				cartRepository.deleteById(id);
+			    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+			} catch (Exception e) {
+			    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+			}
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+	}
+	
+	public ResponseEntity<HttpStatus> deleteCartByUserId(String idUser) {
+		Optional<Cart> cartData = cartRepository.findByUser(idUser);
+		
+		if (cartData.isPresent()) {
+			try {
+				cartRepository.deleteByUser(idUser);
+			    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+			} catch (Exception e) {
+			    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+			}
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
 	}
 	

@@ -36,11 +36,6 @@ public class CartController{
 		return cartService.updateProduct(idUser, idProduct, quantity);
 	}
 	
-	@DeleteMapping("/{id}")
-	public ResponseEntity<HttpStatus> deleteById(@PathVariable String id) {
-		return cartService.deleteCart(id);
-	}
-	
 	@PostMapping("/coupon/{idUser}/{codCoupon}")
 	public ResponseEntity<Cart> addCoupon(@PathVariable String idUser, @PathVariable String codCoupon) {
 		return cartService.addCoupon(idUser, codCoupon);
@@ -54,5 +49,20 @@ public class CartController{
 	@GetMapping("/{id}")
 	public ResponseEntity<Cart> getById(@PathVariable String id) {
 		return cartService.findById(id);
+	}
+	
+	@GetMapping("/user/{idUser}")
+	public ResponseEntity<Cart> getByUserId(@PathVariable String idUser) {
+		return cartService.findByUserId(idUser);
+	}
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<HttpStatus> deleteById(@PathVariable String id) {
+		return cartService.deleteCart(id);
+	}
+	
+	@DeleteMapping("/user/{idUser}")
+	public ResponseEntity<HttpStatus> deleteByUserId(@PathVariable String idUser) {
+		return cartService.deleteCartByUserId(idUser);
 	}
 }

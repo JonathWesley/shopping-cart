@@ -1,0 +1,625 @@
+{
+	"info": {
+		"_postman_id": "36d66c0f-0938-4be1-99a5-5b7f96b973ca",
+		"name": "ShoppingCart",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "addProductToCart",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9060/shop/v1/cart/product/61ec6d5e3471474a3d0b5027/61ebb454592cf360a063d4ba/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9060",
+					"path": [
+						"shop",
+						"v1",
+						"cart",
+						"product",
+						"61ec6d5e3471474a3d0b5027",
+						"61ebb454592cf360a063d4ba",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "removeProductFromCart",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9060/shop/v1/cart/product/61ec6d5e3471474a3d0b5027/61ec70b982025b4ebc44ba78",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9060",
+					"path": [
+						"shop",
+						"v1",
+						"cart",
+						"product",
+						"61ec6d5e3471474a3d0b5027",
+						"61ec70b982025b4ebc44ba78"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateProductOnCart",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9060/shop/v1/cart/product/61ec6d5e3471474a3d0b5027/61ec70b982025b4ebc44ba78/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9060",
+					"path": [
+						"shop",
+						"v1",
+						"cart",
+						"product",
+						"61ec6d5e3471474a3d0b5027",
+						"61ec70b982025b4ebc44ba78",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addCouponToCart",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9060/shop/v1/cart/coupon/61ec6d5e3471474a3d0b5027/free15",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9060",
+					"path": [
+						"shop",
+						"v1",
+						"cart",
+						"coupon",
+						"61ec6d5e3471474a3d0b5027",
+						"free15"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "removeCouponFromCart",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9060/shop/v1/cart/coupon/61ec6d5e3471474a3d0b5027",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9060",
+					"path": [
+						"shop",
+						"v1",
+						"cart",
+						"coupon",
+						"61ec6d5e3471474a3d0b5027"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteCart",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9060/shop/v1/cart/61ec98412fc8db1d6e7c9cd4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9060",
+					"path": [
+						"shop",
+						"v1",
+						"cart",
+						"61ec98412fc8db1d6e7c9cd4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteCartByUserID",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9060/shop/v1/cart/user/61ec6d5e3471474a3d0b5027",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9060",
+					"path": [
+						"shop",
+						"v1",
+						"cart",
+						"user",
+						"61ec6d5e3471474a3d0b5027"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getCart",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9060/shop/v1/cart/61ec9a79c4a37b03cdebd4ef",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9060",
+					"path": [
+						"shop",
+						"v1",
+						"cart",
+						"61ec9a79c4a37b03cdebd4ef"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getCartByUserId",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9060/shop/v1/cart/user/61ec6d5e3471474a3d0b5027",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9060",
+					"path": [
+						"shop",
+						"v1",
+						"cart",
+						"user",
+						"61ec6d5e3471474a3d0b5027"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "InsertProduct",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"azeitona\",\r\n    \"price\": 20.0,\r\n    \"quantity\": 2,\r\n    \"isActive\": true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9060/shop/v1/product/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9060",
+					"path": [
+						"shop",
+						"v1",
+						"product",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "InsertCoupon",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"cod\": \"free15\",\r\n    \"value\": 15,\r\n    \"isActive\": true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9060/shop/v1/coupon/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9060",
+					"path": [
+						"shop",
+						"v1",
+						"coupon",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "InsertUser",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"jonath\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9060/shop/v1/user/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9060",
+					"path": [
+						"shop",
+						"v1",
+						"user",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "findProductById",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9060/shop/v1/product/61ebb454592cf360a063d4bc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9060",
+					"path": [
+						"shop",
+						"v1",
+						"product",
+						"61ebb454592cf360a063d4bc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "findCouponById",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9060/shop/v1/coupon/61ebbcb6bfd53e6b7517b8a4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9060",
+					"path": [
+						"shop",
+						"v1",
+						"coupon",
+						"61ebbcb6bfd53e6b7517b8a4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "findUserById",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9060/shop/v1/user/61ec5fc5cd357d1247bbae9d",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9060",
+					"path": [
+						"shop",
+						"v1",
+						"user",
+						"61ec5fc5cd357d1247bbae9d"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateProduct",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"banana\",\r\n    \"price\": 12,\r\n    \"quantity\": 2,\r\n    \"isActive\": true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9060/shop/v1/product/61eba12a4e7f5a0b5f82574a",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9060",
+					"path": [
+						"shop",
+						"v1",
+						"product",
+						"61eba12a4e7f5a0b5f82574a"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateCoupon",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"cod\": \"free12\",\r\n    \"value\": 12,\r\n    \"isActive\": true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9060/shop/v1/coupon/61eba9faa9f4da3258638b4f",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9060",
+					"path": [
+						"shop",
+						"v1",
+						"coupon",
+						"61eba9faa9f4da3258638b4f"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateUser",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"wesley\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9060/shop/v1/user/61ec5fc5cd357d1247bbae9d",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9060",
+					"path": [
+						"shop",
+						"v1",
+						"user",
+						"61ec5fc5cd357d1247bbae9d"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteProduct",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9060/shop/v1/product/61eba12a4e7f5a0b5f82574a",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9060",
+					"path": [
+						"shop",
+						"v1",
+						"product",
+						"61eba12a4e7f5a0b5f82574a"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteCoupon",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9060/shop/v1/coupon/61ebabb8a9f4da3258638b50",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9060",
+					"path": [
+						"shop",
+						"v1",
+						"coupon",
+						"61ebabb8a9f4da3258638b50"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteUser",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9060/shop/v1/user/61ec5fc5cd357d1247bbae9d",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9060",
+					"path": [
+						"shop",
+						"v1",
+						"user",
+						"61ec5fc5cd357d1247bbae9d"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
