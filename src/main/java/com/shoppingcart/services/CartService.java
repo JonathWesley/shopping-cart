@@ -46,10 +46,13 @@ public class CartService {
 				Optional<Product> productData = productRepository.findById(idProduct);
 				
 				if(productData.isPresent()) {
-					if(productData.get().getQuantity() < quantity) {
+					if(!productData.get().getIsActive()) 
 						return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-					}
 					
+					if(productData.get().getQuantity() < quantity) 
+						return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+					
+				
 					Optional<Cart> cartData = cartRepository.findByUser(idUser);
 					
 					if(cartData.isPresent()) {
@@ -182,6 +185,9 @@ public class CartService {
 				Optional<Coupon> couponData = couponRepository.findByCod(codCoupon);
 				
 				if(couponData.isPresent()) {
+					if(!couponData.get().getIsActive()) 
+						return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+					
 					Cart cartUpdated = cartData.get();
 					
 					cartUpdated.setCoupon(couponData.get());
