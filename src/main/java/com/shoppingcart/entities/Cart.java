@@ -6,6 +6,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.shoppingcart.models.ProductOnCart;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,8 +24,13 @@ public class Cart {
 	private String id;
 	
 	@DBRef
-	private Coupon coupon;
+	private User user;
 	
 	@DBRef
+	private Coupon coupon;
+	
 	private List<ProductOnCart> products;
+	
+	private Double totalValue;
+	
 }

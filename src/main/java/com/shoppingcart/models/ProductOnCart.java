@@ -1,7 +1,9 @@
-package com.shoppingcart.entities;
+package com.shoppingcart.models;
 
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.shoppingcart.entities.Product;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,4 +21,6 @@ public class ProductOnCart {
 	private Product product;
 	
 	private Integer quantity;
+	
+	private Double subTotalValue;
 }
