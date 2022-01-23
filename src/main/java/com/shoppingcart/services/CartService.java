@@ -9,12 +9,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.Gson;
 import com.shoppingcart.entities.Cart;
 import com.shoppingcart.entities.Coupon;
 import com.shoppingcart.entities.Product;
 import com.shoppingcart.entities.ProductOnCart;
 import com.shoppingcart.entities.User;
 import com.shoppingcart.exceptions.InvalidInfoException;
+import com.shoppingcart.exceptions.ObjectNotFoundException;
 import com.shoppingcart.models.CartResponse;
 import com.shoppingcart.repositories.CartRepository;
 import com.shoppingcart.repositories.CouponRepository;
@@ -39,7 +41,9 @@ public class CartService {
 	@Autowired
 	MongoOperations mongoOperations;
 	
-	public ResponseEntity<Cart> addProduct(String idUser, String idProduct, Integer quantity) {
+	private final Gson gson = new Gson();
+	
+	public ResponseEntity addProduct(String idUser, String idProduct, Integer quantity) {
 		try {
 			Optional<User> userData = userRepository.findById(idUser);
 			
@@ -61,14 +65,14 @@ public class CartService {
 						List<ProductOnCart> products = cartUpdated.getProducts();
 						
 						ProductOnCart productOnCart = products.stream().filter(product -> product.getProduct().getId().equals(idProduct)).findFirst().orElse(null);
-						if(productOnCart != null) {
+						if(productOnCart != null) 
 							throw new InvalidInfoException("Produto já existe no carrinho.");
-						}
 						
 						products.add(new ProductOnCart(productData.get(), quantity));
 						
 						cartUpdated.setProducts(products);
 						
+						log.info("Carrinho a ser criado: ", gson.toJson(cartUpdated));
 					    return ResponseEntity.ok().body(cartRepository.save(cartUpdated));
 					}else {
 						ProductOnCart productOnCart = ProductOnCart.builder().product(productData.get()).quantity(quantity).build();
@@ -77,22 +81,26 @@ public class CartService {
 						
 						Cart cartCreated = Cart.builder().user(userData.get()).products(products).build();
 						
+						log.info("Carrinho a ser criado: ", gson.toJson(cartCreated));
 						return ResponseEntity.ok().body(cartRepository.save(cartCreated));
 					}
 					
-				}
-			}
+				} else 
+					throw new ObjectNotFoundException("Produto não encontrado.");
+				
+			}else 			
+				throw new ObjectNotFoundException("Usuário não encontrado.");
 			
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-		} catch (InvalidInfoException e){
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+		} catch (ObjectNotFoundException e){
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}  catch (InvalidInfoException e){
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		} catch(Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
 	}
 
-	public ResponseEntity<Cart> removeProduct(String idUser, String idProduct) {
+	public ResponseEntity removeProduct(String idUser, String idProduct) {
 		try {
 			Optional<Cart> cartData = cartRepository.findByUser(idUser);
 			
@@ -104,28 +112,32 @@ public class CartService {
 				ProductOnCart productOnCart = products.stream().filter(product -> product.getProduct().getId().equals(idProduct)).findFirst().orElse(null);
 				
 				if(productOnCart != null) {
+					log.info("Produto a ser removido: ", gson.toJson(productOnCart));
 					products.remove(productOnCart);
 					
 					if(products.isEmpty()) {
+						log.info("Carrinho a ser removido: ", gson.toJson(cartUpdated));
 						cartRepository.deleteById(cartUpdated.getId());
 						
-					    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+					    return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Produto removido.");
 					}else {
 						cartUpdated.setProducts(products);
 						
+						log.info("Carrinho atualizado (produto removido): ", gson.toJson(cartUpdated));
 					    return ResponseEntity.ok().body(cartRepository.save(cartUpdated));
 					}
-				}				
-			}
-			
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+				} else 
+					throw new ObjectNotFoundException("Produto não encontrado.");			
+			} else 
+				throw new ObjectNotFoundException("Carrinho não encontrado.");
+		} catch (ObjectNotFoundException e){
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		} catch(Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
 	}
 	
-	public ResponseEntity<Cart> updateProduct(String idUser, String idProduct, Integer quantity) {
+	public ResponseEntity updateProduct(String idUser, String idProduct, Integer quantity) {
 		try {
 			Optional<Cart> cartData = cartRepository.findByUser(idUser);
 			
@@ -137,6 +149,7 @@ public class CartService {
 				ProductOnCart productOnCart = products.stream().filter(product -> product.getProduct().getId().equals(idProduct)).findFirst().orElse(null);
 				
 				if(productOnCart != null) {
+					log.info("Produto a ser atualizado no carrinho: ", gson.toJson(productOnCart));
 					if(productOnCart.getProduct().getQuantity() < quantity) {
 						throw new InvalidInfoException("Produto não possui estoque.");
 					}
@@ -149,27 +162,30 @@ public class CartService {
 					}
 					
 					if(products.isEmpty()) {
+						log.info("Carrinho a ser removido: ", gson.toJson(cartUpdated));
 						cartRepository.deleteById(cartUpdated.getId());
 						
-					    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+					    return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Nenhum produto no carrinho, carrinho removido.");
 					}else {
 						cartUpdated.setProducts(products);
 						
+						log.info("Carrinho atualizado (produto atualizado): ", gson.toJson(cartUpdated));
 					    return ResponseEntity.ok().body(cartRepository.save(cartUpdated));
 					}
-				}
-			}
-			
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-		} catch (InvalidInfoException e){
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+				} else 
+					throw new ObjectNotFoundException("Produto não encontrado.");
+			} else 
+				throw new ObjectNotFoundException("Carrinho não encontrado.");
+		} catch (ObjectNotFoundException e){
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}  catch (InvalidInfoException e){
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		} catch(Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
 	}
 	
-	public ResponseEntity<Cart> addCoupon(String idUser, String codCoupon) {
+	public ResponseEntity addCoupon(String idUser, String codCoupon) {
 		try {
 			Optional<Cart> cartData = cartRepository.findByUser(idUser);
 			
@@ -177,6 +193,7 @@ public class CartService {
 				Optional<Coupon> couponData = couponRepository.findByCod(codCoupon);
 				
 				if(couponData.isPresent()) {
+					log.info("Cupom a ser utilizado: ", gson.toJson(couponData.get()));
 					if(!couponData.get().getIsActive()) 
 						throw new InvalidInfoException("Cupon não ativo.");
 					
@@ -184,20 +201,22 @@ public class CartService {
 					
 					cartUpdated.setCoupon(couponData.get());
 					
+					log.info("Carrinho atualizado (cupom adicionado): ", gson.toJson(cartUpdated));
 				    return ResponseEntity.ok().body(cartRepository.save(cartUpdated));
-				}
-			}
-			
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-		} catch (InvalidInfoException e){
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+				} else 
+					throw new ObjectNotFoundException("Cupom não encontrado.");
+			} else 
+				throw new ObjectNotFoundException("Carrinho não encontrado.");
+		} catch (ObjectNotFoundException e){
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}  catch (InvalidInfoException e){
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		} catch(Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
 	}
 	
-	public ResponseEntity<Cart> removeCoupon(String idUser) {
+	public ResponseEntity removeCoupon(String idUser) {
 		try {
 			Optional<Cart> cartData = cartRepository.findByUser(idUser);
 			
@@ -205,73 +224,83 @@ public class CartService {
 				Cart cartUpdated = cartData.get();
 					
 				cartUpdated.setCoupon(null);
-					
+				
+				log.info("Carrinho atualizado (cupom removido): ", gson.toJson(cartUpdated));
 				return ResponseEntity.ok().body(cartRepository.save(cartUpdated));
-			}
-			
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-		} catch(Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+			} else 
+				throw new ObjectNotFoundException("Cupom não encontrado.");
+		} catch (ObjectNotFoundException e){
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}  catch(Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
 	}
 	
-	public ResponseEntity<CartResponse> findByUserId(String idUser) {
+	public ResponseEntity findByUserId(String idUser) {
 		try {
 			Optional<Cart> cartData = cartRepository.findByUser(idUser);
 			
 			if(cartData.isPresent()) {
 				CartResponse cartResponse = CartResponse.convertToDto(cartData.get());
 				
+				log.info("Carrinho encontrado: ", gson.toJson(cartResponse));
 				return ResponseEntity.ok().body(cartResponse);
-			}
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-		} catch(InvalidInfoException e) {
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+			} else 
+				throw new ObjectNotFoundException("Carrinho não encontrado.");
+		} catch (ObjectNotFoundException e){
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		} catch(Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
 	}
 	
-	public ResponseEntity<Cart> deleteCartByUserId(String idUser) {
-		Optional<Cart> cartData = cartRepository.findByUser(idUser);
-		
-		if (cartData.isPresent()) {
-			try {
+	public ResponseEntity deleteCartByUserId(String idUser) {
+		try {
+			Optional<Cart> cartData = cartRepository.findByUser(idUser);
+			
+			if (cartData.isPresent()) {
+				log.info("Carrinho a ser removido: ", gson.toJson(cartData.get()));
 				cartRepository.deleteByUser(idUser);
-			    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-			} catch (Exception e) {
-			    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-			}
-		} else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+			    return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Carrinho removido.");
+				
+			} else 
+				throw new ObjectNotFoundException("Carrinho não encontrado.");
+		} catch (ObjectNotFoundException e){
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		} catch (Exception e) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
 	}
 
-	public ResponseEntity<Cart> finalizePurchase(String idUser) {
-		Optional<Cart> cartData = cartRepository.findByUser(idUser);
+	public ResponseEntity finalizePurchase(String idUser) {
+		try {
+			Optional<Cart> cartData = cartRepository.findByUser(idUser);
 		
-		if (cartData.isPresent()) {
-			try {
-				Cart cart = cartData.get();
-				cart.getProducts().forEach((item) -> {					
-					if(!item.getProduct().getIsActive()) 
-						throw new InvalidInfoException("Produto não ativo.");
-					if(item.getProduct().getQuantity() < item.getQuantity()) 
-						throw new InvalidInfoException("Produto não possui estoque.");
+			if (cartData.isPresent()) {
+					Cart cart = cartData.get();
+					log.info("Carrinho a ser finalizado: ", gson.toJson(cart));
 					
-					item.getProduct().setQuantity(item.getProduct().getQuantity() - item.getQuantity());
-					productRepository.save(item.getProduct());
-				});
+					cart.getProducts().forEach((item) -> {					
+						if(!item.getProduct().getIsActive()) 
+							throw new InvalidInfoException("Produto não ativo.");
+						if(item.getProduct().getQuantity() < item.getQuantity()) 
+							throw new InvalidInfoException("Produto não possui estoque.");
+						
+						item.getProduct().setQuantity(item.getProduct().getQuantity() - item.getQuantity());
+						productRepository.save(item.getProduct());
+					});
+					
+					cartRepository.deleteByUser(idUser);
+				    return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Compra finalizada, carrinho removido.");
 				
-				cartRepository.deleteByUser(idUser);
-			    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-			} catch (InvalidInfoException e){
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-			}catch (Exception e) {
-			    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-			}
-		} else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+			} else 
+				throw new ObjectNotFoundException("Carrinho não encontrado.");
+		} catch (ObjectNotFoundException e){
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}  catch (InvalidInfoException e){
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}catch (Exception e) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
 	}
 }
