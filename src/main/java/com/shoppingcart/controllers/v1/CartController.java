@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shoppingcart.entities.Cart;
+import com.shoppingcart.models.CartResponse;
 import com.shoppingcart.services.CartService;
 
 @RestController
@@ -47,22 +48,22 @@ public class CartController{
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Cart> getById(@PathVariable String id) {
+	public ResponseEntity<CartResponse> getById(@PathVariable String id) {
 		return cartService.findById(id);
 	}
 	
 	@GetMapping("/user/{idUser}")
-	public ResponseEntity<Cart> getByUserId(@PathVariable String idUser) {
+	public ResponseEntity<CartResponse> getByUserId(@PathVariable String idUser) {
 		return cartService.findByUserId(idUser);
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<HttpStatus> deleteById(@PathVariable String id) {
+	public ResponseEntity<Cart> deleteById(@PathVariable String id) {
 		return cartService.deleteCart(id);
 	}
 	
 	@DeleteMapping("/user/{idUser}")
-	public ResponseEntity<HttpStatus> deleteByUserId(@PathVariable String idUser) {
+	public ResponseEntity<Cart> deleteByUserId(@PathVariable String idUser) {
 		return cartService.deleteCartByUserId(idUser);
 	}
 }
