@@ -8,6 +8,8 @@ Algumas escolhas de funcionamento do carrinho foram tomadas arbitrariamente. Com
 
 Foram adicionados CRUD's básicos para controle de usuários, produtos e cupons. Deixando a aplicação principal do carrinho na rota */cart* .
 
+Para os testes unitários foi utilizado o JUnit, dando cobertura sobre controller e service da aplicação principal (cart). Para executar os testes unitários é preciso abrir o projeto em uma IDE de sua escolha, e rodar o projeto como JUnit Test.
+
 # Como executar
 O projeto utiliza de docker para facilitar a execução do mesmo. Com isso, o único pré-requisito para a execução do projeto em uma nova máquina, é que esta máquina possua o docker instalado.
 
@@ -34,3 +36,7 @@ Além disso, você pode verificar a utilização do MongoDB através da url *htt
 Uma vez com o projeto executando, pode ser feita sua utilização.
 
 Através do Swagger estão disponibilizadas as rotas da API, contendo CRUD's básicos para o controle dos produtos (*product-controller*), usuários (*user-controller*) e cupons (*coupon-controller*), e a aplicação principal de carrinho (*cart-controller*). 
+
+Além da utilização via Swagger, no repositório existe uma collection do Postman que pode ser importada e utilizada.
+
+Como recomendação para utilização da API, primeiro utilize o *user-controller* para adicionar um usuário novo ao sistema, em seguida utilize o *product-controller* para inserir um novo produto. Com estes dois elementos, o carrinho pode ser criado, utilizando a rota */cart/product/{idUser}/{idProduct}/{quantity}*. Para adicionar um cupom, é preciso primeiro criá-lo utilizando o *coupon-controller*, e em seguida adicionar o cupom ao carrinho.
