@@ -195,7 +195,7 @@ public class CartService {
 				if(couponData.isPresent()) {
 					log.info("Cupom a ser utilizado: ", gson.toJson(couponData.get()));
 					if(!couponData.get().getIsActive()) 
-						throw new InvalidInfoException("Cupon não ativo.");
+						throw new InvalidInfoException("Cupom não ativo.");
 					
 					Cart cartUpdated = cartData.get();
 					
@@ -228,7 +228,7 @@ public class CartService {
 				log.info("Carrinho atualizado (cupom removido): ", gson.toJson(cartUpdated));
 				return ResponseEntity.ok().body(cartRepository.save(cartUpdated));
 			} else 
-				throw new ObjectNotFoundException("Cupom não encontrado.");
+				throw new ObjectNotFoundException("Carrinho não encontrado.");
 		} catch (ObjectNotFoundException e){
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		}  catch(Exception e) {

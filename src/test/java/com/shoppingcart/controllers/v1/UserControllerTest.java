@@ -55,7 +55,7 @@ public class UserControllerTest {
 	
 	@Test
 	public void testInsert_whenSucess_expectStatusCreated() throws Exception {
-		String body = "{\"name\":\"Pedro\"}";
+		String body = "{\"name\":\"Jonath\"}";
 	
 		new UserTemplate();
 		User userInput = UserTemplate.insertUserTemplate();
@@ -67,14 +67,14 @@ public class UserControllerTest {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath(".id").value("61ec5fc5cd357d1247bbae9d"))
-                .andExpect(jsonPath(".name").value("Pedro"));
+                .andExpect(jsonPath(".id").value("61ec6d5e3471474a3d0b5027"))
+                .andExpect(jsonPath(".name").value("Jonath"));
 	
 	}
 	
 	@Test
 	public void testInsert_whenInternalServerError_expectStatusInternalServerError() throws Exception {
-		String body = "{\"name\":\"Pedro\"}";
+		String body = "{\"name\":\"Jonath\"}";
 	
 		new UserTemplate();
 		User userInput = UserTemplate.insertUserTemplate();
@@ -104,7 +104,7 @@ public class UserControllerTest {
 		
 	@Test
 	public void testFindById_whenSucess_expectStatusOK() throws Exception {
-		String id = "61ec5fc5cd357d1247bbae9d";
+		String id = "61ec6d5e3471474a3d0b5027";
 		new UserTemplate();
 		User user = UserTemplate.getUserTemplate();
 		
@@ -114,8 +114,8 @@ public class UserControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath(".id").value("61ec5fc5cd357d1247bbae9d"))
-                .andExpect(jsonPath(".name").value("Pedro"));
+                .andExpect(jsonPath(".id").value("61ec6d5e3471474a3d0b5027"))
+                .andExpect(jsonPath(".name").value("Jonath"));
 		
 	}
 	
@@ -132,7 +132,7 @@ public class UserControllerTest {
 	
 	@Test
 	public void testUpdate_whenSucess_expectStatusOK() throws Exception {
-		String id = "61ec5fc5cd357d1247bbae9d";
+		String id = "61ec6d5e3471474a3d0b5027";
 		String body = "{\"name\":\"Bruno\"}";
 	
 		new UserTemplate();
@@ -145,14 +145,14 @@ public class UserControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath(".id").value("61ec5fc5cd357d1247bbae9d"))
+                .andExpect(jsonPath(".id").value("61ec6d5e3471474a3d0b5027"))
                 .andExpect(jsonPath(".name").value("Bruno"));
 	
 	}
 	
 	@Test
 	public void testUpdate_whenInternalServerError_expectStatusInternalServerError() throws Exception {
-		String id = "61ec5fc5cd357d1247bbae9d";
+		String id = "61ec6d5e3471474a3d0b5027";
 		String body = "{\"name\":\"Bruno\"}";
 	
 		new UserTemplate();
@@ -168,7 +168,7 @@ public class UserControllerTest {
 	
 	@Test
 	public void testUpdate_whenBadRequest_expectStatusBadRequest() throws Exception {
-		String id = "61ec5fc5cd357d1247bbae9d";
+		String id = "61ec6d5e3471474a3d0b5027";
 		String body = "{}";
 	
 		new UserTemplate();
@@ -200,7 +200,7 @@ public class UserControllerTest {
 	
 	@Test
 	public void testDalete_whenSucess_expectStatusNoContent() throws Exception {
-		String id = "61ec5fc5cd357d1247bbae9d";
+		String id = "61ec6d5e3471474a3d0b5027";
 		
 		when(userService.deleteUser(id)).thenReturn(ResponseEntity.status(HttpStatus.NO_CONTENT).body(null));
 		
@@ -212,7 +212,7 @@ public class UserControllerTest {
 	
 	@Test
 	public void testDelete_whenInternalServerError_expectStatusInternalServerError() throws Exception {
-		String id = "61ec5fc5cd357d1247bbae9d";
+		String id = "61ec6d5e3471474a3d0b5027";
 		
 		when(userService.deleteUser(id)).thenReturn(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null));
 		
