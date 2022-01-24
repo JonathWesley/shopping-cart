@@ -8,7 +8,7 @@ Algumas escolhas de funcionamento do carrinho foram tomadas arbitrariamente. Com
 
 Foram adicionados CRUD's básicos para controle de usuários, produtos e cupons. Deixando a aplicação principal do carrinho na rota */cart* .
 
-Para os testes unitários foi utilizado o JUnit, dando cobertura sobre controller e service da aplicação principal (cart). Para executar os testes unitários é preciso abrir o projeto em uma IDE de sua escolha, e rodar o projeto como JUnit Test.
+Para os testes unitários foi utilizado o JUnit, dando cobertura sobre controller e service da aplicação principal (cart). Para executar os testes unitários é preciso abrir o projeto em uma IDE de sua escolha (IDE utilizada para o desenvolvimento foi o STS4, outra IDE recomendada é o IntelliJ), e rodar o projeto como JUnit Test.
 
 # Como executar
 O projeto utiliza de docker para facilitar a execução do mesmo. Com isso, o único pré-requisito para a execução do projeto em uma nova máquina, é que esta máquina possua o docker instalado.
