@@ -12,6 +12,13 @@ public class CouponTemplate {
 		
 	}
 	
+	public static Coupon getCouponInactiveTemplate() {
+		String mock = "{\"id\":\"61ebbcb6bfd53e6b7517b8a4\",\"cod\":\"free15\",\"value\":15.0,\"isActive\":false}";
+		Gson g = new Gson();
+		return g.fromJson(mock, Coupon.class);
+		
+	}
+	
 	public static Coupon insertCouponTemplate() {
 		String mock = "{\"cod\":\"free15\",\"value\":15.0,\"isActive\":true}";
 		Gson g = new Gson();
